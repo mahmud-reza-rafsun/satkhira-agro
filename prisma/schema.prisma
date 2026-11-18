@@ -1,0 +1,168 @@
+// Farm Calculator — Postgres schema (Neon)
+// Data mirrors what the calculator keeps in the browser today
+// (localStorage keys farm-calculator-*), so the app can move to the
+// database without changing what a batch / entry / list means.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EntryKind {
+  PURCHASE_EXPENSE
+  SALE_INCOME
+}
+
+enum ContactKind {
+  BUYER
+  SELLER
+}
+
+model Batch {
+  id           String         @id @default(cuid())
+  flock        String
+  subFlock     String?
+  name         String
+  batchNo      Int
+  rate         Float?
+  totalValue   Float?
+  source       String?
+  remark       String?
+  date         DateTime
+  growthRate   Float?
+  growthMonths Int?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  entries      LedgerEntry[]
+  stock        Stock?
+  growthProducts GrowthProduct[]
+
+  @@unique([flock, batchNo])
+  @@index([flock])
+}
+
+model LedgerEntry {
+  id        String    @id @default(cuid())
+  kind      EntryKind
+  flock     String
+  batchNo   Int?
+  batchId   String?
+  batch     Batch?    @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  amount    Float
+  date      DateTime
+  category  String?
+  note      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([flock, batchNo])
+  @@index([kind, date])
+}
+
+model FixedInvestment {
+  id        String   @id @default(cuid())
+  date      DateTime
+  category  String
+  amount    Float
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category, date])
+}
+
+model Contact {
+  id        String      @id @default(cuid())
+  kind      ContactKind
+  name      String
+  phone     String?
+  address   String?
+  remark    String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([kind, name])
+}
+
+model Staff {
+  id        String   @id @default(cuid())
+  name      String
+  month     String
+  salary    Float
+  paid      Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, month])
+}
+
+model Due {
+  id        String   @id @default(cuid())
+  person    String
+  amount    Float
+  date      DateTime?
+  note      String?
+  settled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([settled])
+}
+
+model Todo {
+  id        String   @id @default(cuid())
+  text      String
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessPlan {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Stock {
+  id        String   @id @default(cuid())
+  flock     String
+  batchNo   Int
+  current   Int
+  batchId   String?  @unique
+  batch     Batch?   @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([flock, batchNo])
+}
+
+model GrowthProduct {
+  id          String   @id @default(cuid())
+  productName String
+  flock       String?
+  quantity    Float
+  growthRate  Float?
+  months      Int?
+  batchId     String?
+  batch       Batch?   @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Backup {
+  id        String   @id @default(cuid())
+  label     String?
+  data      Json
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

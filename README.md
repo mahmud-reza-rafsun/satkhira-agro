@@ -24,6 +24,37 @@ npm run start
 
 GitHub-এ push করার পর Vercel-এ গিয়ে "Add New Project" → এই রিপো সিলেক্ট করুন।
 আর কিছু সেট করতে হবে না — Next.js প্রজেক্ট হিসেবে নিজে থেকেই ধরে নেবে।
+**তবে একটা জিনিস:** Vercel → Project Settings → Environment Variables-এ
+`DATABASE_URL`-এ Neon-এর connection string দিতে হবে, নাহলে API রুটগুলো
+ডাটাবেজে পৌঁছাবে না।
+
+## ব্যাকএন্ড — Prisma + Postgres (Neon)
+
+ডাটাবেজের স্কিমা `prisma/schema.prisma`-এ। টেবিল: Batch, LedgerEntry
+(ক্রয়/খরচ + বিক্রি/ইনকাম), FixedInvestment, Contact (ক্রেতা/বিক্রেতা),
+Staff, Due (বাকি লেনদেন), Todo, BusinessPlan, Stock, GrowthProduct,
+Backup, Setting — আগের localStorage ডেটার আয়না, তাই অর্থ বদলায়নি।
+
+API রুট (`app/api/...`): `health`, `batches`, `entries`, `investments`,
+`contacts`, `staff`, `stock`, `growth`, `backups`, `dues`, `todos`, `plans` —
+সবগুলোতেই GET/POST, আর একটা করে `[id]` রুটে GET/PATCH/DELETE।
+
+সংযোগ: `lib/prisma.ts` Neon-এর serverless (HTTPS) ড্রাইভার ব্যবহার করে
+(`@prisma/adapter-neon`)। সরাসরি Postgres TCP সব নেটওয়ার্ক থেকে খোলে না,
+তাই এই পথ — Vercel-এও এটাই Neon-এর সুপারিশ করা সেটআপ।
+
+`.env`-এ `DATABASE_URL` থাকে (gitignore করা — কখনো কমিট হয় না)।
+স্কিমা বদলালে:
+
+```bash
+npm run db:sql    # prisma/schema.sql নতুন করে বানায়
+npm run db:apply  # HTTPS দিয়ে Neon-এ প্রয়োগ করে
+```
+
+(`prisma db push` সরাসরি Postgres সংযোগ চায়, তাই এই পরিবেশে চলে না।)
+
+**এখনো ফ্রন্টএন্ড localStorage-ই ব্যবহার করে** — API তৈরি আছে, ফ্রন্টএন্ড
+সেটার সঙ্গে যুক্ত করা পরের ধাপ।
 
 ## কীভাবে পোর্ট করা হয়েছে
 
