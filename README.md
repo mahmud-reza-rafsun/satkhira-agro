@@ -70,3 +70,19 @@ npm run db:apply  # HTTPS দিয়ে Neon-এ প্রয়োগ কর�
 হয়। তাই muse.ai-র লিংক বা HTML ফাইলে জমা হিসাব এই নতুন ঠিকানায় (localhost
 বা Vercel) নিজে থেকে আসবে না। হিসাব নিতে হলে পুরনো জায়গা থেকে **Backup
 ডাউনলোড** করে নতুন জায়গায় **Restore Backup** করুন।
+
+## UI (shadcn)
+
+- **shadcn/ui** বসানো আছে (Tailwind v4 + Radix): টোকেন `app/globals.css`-এ,
+  কম্পোনেন্ট `components/ui/`-তে (Button, Input, Label, Select, Popover,
+  Calendar), সেটআপ `components.json` + `postcss.config.mjs`।
+  প্রাইমারি রং ব্র্যান্ডের সবুজ (`--primary`), বাকি টোকেন shadcn-এর
+  neutral প্যালেট।
+- ক্যালকুলেটরের আসল অ্যাপটা (পোর্ট করা HTML) React নয়, তাই তার
+  ড্রপডাউন/বাটন/ইনপুট/তারিখের ঘরগুলো সরাসরি shadcn কম্পোনেন্ট দিয়ে
+  বদলানো যায়নি — বদলে `components/shadcn-overrides.css` লেয়ারটি একই
+  shadcn রূপ দেয় (h-10 ঘর, গোল কোণা, বর্ডার, ফোকাস-রিং, সবুজ প্রাইমারি
+  বাটন, ডেট-রেঞ্জের দুই তারিখের ঘরসহ)। **লেআউটে কোনো বদল নেই** — ঘরগুলোর
+  অবস্থান, চওড়া, গ্রিড সব আগের মতোই আছে।
+- নতুন React UI লাগলে `components/ui/`-এর কম্পোনেন্ট সরাসরি ব্যবহার করা
+  যাবে (যেমন রিপোর্টের ডেট-রেঞ্জে Popover + Calendar)।

@@ -14,10 +14,12 @@ export default function FarmCalculator({
   css,
   markup,
   scripts,
+  overridesCss,
 }: {
   css: string;
   markup: string;
   scripts: string[];
+  overridesCss: string;
 }) {
   const ranRef = useRef(false);
 
@@ -35,6 +37,9 @@ export default function FarmCalculator({
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <div dangerouslySetInnerHTML={{ __html: markup }} />
+      {/* shadcn control styling — after the app's own CSS so it wins,
+          layout untouched (only the controls' own look changes). */}
+      <style dangerouslySetInnerHTML={{ __html: overridesCss }} />
     </>
   );
 }

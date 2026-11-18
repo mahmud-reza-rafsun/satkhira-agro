@@ -1,0 +1,287 @@
+/* shadcn control styling for the Farm Calculator.
+ *
+ * The app itself is the ported single-file calculator (its own CSS and
+ * markup stay untouched). This layer only re-skins the form controls —
+ * inputs, selects, date fields, action buttons — to the shadcn look,
+ * using the shadcn tokens from globals.css. Layout is untouched: no
+ * widths, positions or grid rules are changed here, only the controls'
+ * own height, border, radius, colors and focus ring.
+ *
+ * It is injected AFTER the app's own <style>, and every rule is scoped
+ * to .wrap, so it wins over the app's single-class rules in both light
+ * and dark mode (the app uses !important in a few dark-mode rules, so
+ * background / border-color carry !important here too).
+ */
+
+/* ---------- Inputs & textareas: shadcn Input ---------- */
+.wrap .flock-input:not(select),
+.wrap .tool-input:not(select),
+.wrap .contact-text,
+.wrap .brand-edit-input,
+.wrap .flock-edit-input,
+.wrap .stock-num,
+.wrap textarea {
+  height: 2.5rem;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid var(--input) !important;
+  background: var(--background) !important;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--foreground);
+  box-shadow: none;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wrap textarea {
+  height: auto;
+  min-height: 5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.wrap input::placeholder,
+.wrap textarea::placeholder {
+  color: var(--muted-foreground);
+  opacity: 1;
+}
+
+.wrap input:disabled,
+.wrap select:disabled,
+.wrap textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Date fields (batch date, report from/to): same shadcn input look. */
+.wrap input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+/* ---------- Selects: shadcn Select (closed state) ---------- */
+.wrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 2.5rem;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid var(--input) !important;
+  background-color: var(--background) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem 1rem;
+  padding: 0.25rem 2rem 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--foreground);
+  outline: none;
+  cursor: pointer;
+  box-shadow: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* ---------- Focus ring (inputs, selects, textareas) ---------- */
+.wrap .flock-input:focus-visible,
+.wrap .tool-input:focus-visible,
+.wrap .contact-text:focus-visible,
+.wrap .brand-edit-input:focus-visible,
+.wrap .flock-edit-input:focus-visible,
+.wrap .stock-num:focus-visible,
+.wrap textarea:focus-visible,
+.wrap select:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-color: var(--ring) !important;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}
+
+/* ---------- Buttons: shadcn Button base ---------- */
+.wrap .batch-save-full,
+.wrap .flock-save,
+.wrap .brand-edit-save,
+.wrap .batch-confirm-btn,
+.wrap .source-pick-btn,
+.wrap .brand-edit-cancel,
+.wrap .brand-edit-reset,
+.wrap .brand-edit-btn,
+.wrap .calc-back-btn,
+.wrap .fc-clear-btn,
+.wrap .drive,
+.wrap .share-opt,
+.wrap .util-btn,
+.wrap .contact-filter,
+.wrap .ghost,
+.wrap .growth-ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: calc(var(--radius) - 2px);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  height: 2.5rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wrap .batch-save-full:focus-visible,
+.wrap .flock-save:focus-visible,
+.wrap .brand-edit-save:focus-visible,
+.wrap .batch-confirm-btn:focus-visible,
+.wrap .source-pick-btn:focus-visible,
+.wrap .brand-edit-cancel:focus-visible,
+.wrap .brand-edit-reset:focus-visible,
+.wrap .brand-edit-btn:focus-visible,
+.wrap .calc-back-btn:focus-visible,
+.wrap .fc-clear-btn:focus-visible,
+.wrap .drive:focus-visible,
+.wrap .share-opt:focus-visible,
+.wrap .util-btn:focus-visible,
+.wrap .contact-filter:focus-visible,
+.wrap .ghost:focus-visible,
+.wrap .growth-ghost-btn:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}
+
+.wrap .batch-save-full:disabled,
+.wrap .flock-save:disabled,
+.wrap .brand-edit-save:disabled,
+.wrap .batch-confirm-btn:disabled,
+.wrap .source-pick-btn:disabled,
+.wrap .brand-edit-cancel:disabled,
+.wrap .brand-edit-reset:disabled,
+.wrap .brand-edit-btn:disabled,
+.wrap .calc-back-btn:disabled,
+.wrap .fc-clear-btn:disabled,
+.wrap .drive:disabled,
+.wrap .share-opt:disabled,
+.wrap .util-btn:disabled,
+.wrap .contact-filter:disabled,
+.wrap .ghost:disabled,
+.wrap .growth-ghost-btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Primary: save / add / confirm. */
+.wrap .batch-save-full,
+.wrap .flock-save,
+.wrap .brand-edit-save,
+.wrap .batch-confirm-btn:not(.danger),
+.wrap .source-pick-btn {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border: 1px solid transparent !important;
+}
+
+.wrap .batch-save-full:hover,
+.wrap .flock-save:hover,
+.wrap .brand-edit-save:hover,
+.wrap .batch-confirm-btn:not(.danger):hover,
+.wrap .source-pick-btn:hover {
+  background: color-mix(in oklab, var(--primary) 90%, black) !important;
+}
+
+/* Destructive: delete confirm. */
+.wrap .batch-confirm-btn.danger {
+  background: var(--destructive) !important;
+  color: #fff !important;
+  border: 1px solid transparent !important;
+}
+
+.wrap .batch-confirm-btn.danger:hover {
+  background: color-mix(in oklab, var(--destructive) 90%, black) !important;
+}
+
+/* Outline: cancel / reset / back / clear / drive / share / filter. */
+.wrap .brand-edit-cancel,
+.wrap .brand-edit-reset,
+.wrap .brand-edit-btn,
+.wrap .calc-back-btn,
+.wrap .fc-clear-btn,
+.wrap .drive,
+.wrap .share-opt,
+.wrap .util-btn,
+.wrap .contact-filter {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--input) !important;
+}
+
+.wrap .brand-edit-cancel:hover,
+.wrap .brand-edit-reset:hover,
+.wrap .brand-edit-btn:hover,
+.wrap .calc-back-btn:hover,
+.wrap .fc-clear-btn:hover,
+.wrap .drive:hover,
+.wrap .share-opt:hover,
+.wrap .util-btn:hover,
+.wrap .contact-filter:hover {
+  background: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+/* Share menu rows stay left-aligned. */
+.wrap .share-opt {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* Ghost: no border, transparent until hover. */
+.wrap .ghost,
+.wrap .growth-ghost-btn {
+  background: transparent !important;
+  color: var(--foreground) !important;
+  border: 1px solid transparent !important;
+  box-shadow: none;
+}
+
+.wrap .ghost:hover,
+.wrap .growth-ghost-btn:hover {
+  background: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+/* Icon buttons (+): shadcn size="icon", kept square and compact. */
+.wrap .tool-add-btn,
+.wrap .flock-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid var(--input) !important;
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.wrap .tool-add-btn:hover,
+.wrap .flock-add-btn:hover {
+  background: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+.wrap .tool-add-btn:focus-visible,
+.wrap .flock-add-btn:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}

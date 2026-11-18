@@ -5,6 +5,8 @@ export type CalculatorSource = {
   css: string;
   markup: string;
   scripts: string[];
+  /** shadcn control styling, injected after the app's own CSS. */
+  overridesCss: string;
 };
 
 let cached: CalculatorSource | null = null;
@@ -34,6 +36,11 @@ export function getCalculatorSource(): CalculatorSource {
   // The scripts live at the end of <body>; the markup is everything else.
   const markup = body.replace(/<script>[\s\S]*?<\/script>/g, "").trim();
 
-  cached = { css, markup, scripts };
+  const overridesCss = readFileSync(
+    path.join(process.cwd(), "components", "shadcn-overrides.css"),
+    "utf8",
+  );
+
+  cached = { css, markup, scripts, overridesCss };
   return cached;
 }
